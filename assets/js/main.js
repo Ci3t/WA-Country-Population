@@ -151,7 +151,7 @@ const getfetchCities = async (countryName) => {
         limit: 10,
         order: "asc",
         orderBy: "name",
-        country: countryName,
+        country: `${countryName}`,
       }),
     },
   );
@@ -166,56 +166,48 @@ const getfetchCities = async (countryName) => {
 
   //   let {city,country,populationCounts} = data.data[i]
   //   cities2.push({city,country,populationCounts})
-    
-    
+
   // }
-  // const cities = data.data.map((city) => {
-  //   return {
-  //     country: city.country,
-  //     name: city.city,
-  //     population: city.populationCounts[0].value,
-  //   };
-  // });
-  // console.log(cities2); 
-  return data
+  const cities = data.data.map((city) => {
+    return {
+      country: city.country,
+      name: city.city,
+      population: city.populationCounts[0].value,
+    };
+  });
+  // console.log(cities);
+  return cities;
 };
 
 // console.log(getfetchCities('Italy'));
 
-const printCities = async(str) => {
-const data = await getfetchCities()
-const countries = await getCountries()
+const printCities = async (str) => {
+  // const data = await getfetchCities()
+  const countries = await getCountries();
 
-let countryArr = [];
-      for (let i=0;i<countries.length;i++) {
-        
-          // console.log(countries[i].name);
-          const data = await getfetchCities(countries[i].name.common)
-          return data
-        
-        
-        // Object.assign(countryArr, data)
-      }
-  // let cities2 = []
-  // for (let i = 0; i < data.data.length; i++) {
-  //   // console.log(data.data[i]);
+  let countryArr = [];
+  for (let i = 0; i < countries.length; i++) {
+    countryArr.push(countries[i].name.common);
+  }
+  let country = [];
+  countryArr.map(async (country) => {
+    const data = await getfetchCities(country);
 
-  //   let {city,country,populationCounts} = data.data[i]
-  //   cities2.push({city,country,populationCounts})
-    
-    
-  // // }
-  // const cities = data.data.map((city) => {
-  //   return {
-  //     country: city.country,
-  //     name: city.city,
-  //     population: city.populationCounts[0].value,
-  //   };
-  // });
-  // console.log(cities); 
-  // // return countryArr
+    for (let city of data) {
+      let { country, city, population } = city;
+      country.push({ country, city, population });
+    }
+  });
+  console.log(await country);
 };
-console.log(printCities());
+// console.log(printCities());
+// const printCitiesTest = async(str) => {
+//   const cities = await printCities('Italy')
+//   for(let city of cities.data){
+//     console.log(city);
+//   }
+// }
+// printCitiesTest()
 // const getCities = async () => {
 //   let countries = await getCountries();
 
@@ -359,43 +351,133 @@ const eventListeners = () => {
   });
 };
 
-const testCities = async (str) => {
-  const cities = await getfetchCities(str);
-  const countries = await getCountries();
-  let countryArr = [];
-  for (let country of countries) {
-    countryArr.push(country.name.common);
-  }
-
-  for (let i = 0; i < countryArr.length; i++) {
-    try {
-      const city = await getfetchCities(countryArr[i]);
-      console.log(city);
-    } catch {
-      (err) => console.log(err);
-    }
-  }
-  // const citiesFetched = countryArr.map(async(city)=>{
-  //   const city2 = await getfetchCities(city)
-  //   return city
-  // })
-  // console.log(await citiesFetched);
-};
-// testCities()
 const getCityByCountryButton = async () => {
   const Conitaner = document.querySelector(".container");
-  const cities = await getfetchCities();
+  // const cities = await getfetchCities();
   const countries = await getCountries();
+  const ctx = document.getElementById("myChart").getContext("2d");
+  // console.log(cities);
 
-  console.log(cities);
-
+  let countryArr = [];
+  let regionArr = [];
+  let cityCountry = [];
+  let currentCitiesBool = true
+  let currentCities = []
+  let currentPopulation = []
   Conitaner.addEventListener("click", async (e) => {
     if (e.target.tagName === "BUTTON") {
       const button = e.target;
-      let countryArr = [];
-      for (let country of countries) {
-        countryArr.push(country.name.common);
+
+      // console.log(button);
+      for (let i = 0; i < countries.length; i++) {
+        // console.log(countries[i]);
+        countryArr.push(countries[i].name.common);
+        regionArr.push(countries[i]);
       }
+      // console.log(countryArr);
+      
+     
+      for (let country of countryArr) {
+      // for (let i = 0; i < countryArr.length; i++) {
+        // console.log(countryArr[i]);
+        try {
+          if (button.textContent == country) {
+            const data = await getfetchCities(country);
+            // console.log(data[0].name);
+            // console.log('yes');
+            for (let city of data) {
+              // console.log(city);
+              // console.log(city);
+              let { country, name, population } = city;
+              // console.log(name);
+              cityCountry.push({ country, name, population });
+           
+            }
+          }
+        } catch {
+          (err) => console.log(err);
+        }
+
+      }
+      cityCountry = cityCountry.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        t.country === value.country && t.name === value.name
+      ))
+    )
+        console.log(currentCities);
+    for(let city of cityCountry){
+
+      let{name,country,population} = city
+      console.log(`country ${country}`);
+
+      if(button.textContent == country){
+        
+        if(currentCities.includes(city)){
+          currentCities =[]
+          currentPopulation= []
+          
+        }else{
+          currentCities.push(name)
+          currentPopulation.push(population)
+        }
+      }
+      
+  let chartStatus = Chart.getChart("myChart");
+  if (chartStatus != undefined) {
+    chartStatus.destroy();
+  }
+
+  const myChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: currentCities,
+      datasets: [
+        {
+          label: "Population",
+          data: currentPopulation,
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+    }
+        
+      
+      // for (let i=0;i<countries.length;i++) {
+      //     // console.log(countries[i].name.common);
+
+      //       // console.log(countries[i].name);
+      //       // return data
+
+      //     // Object.assign(countryArr, data)
+      //   }
+      // let countryArr = [];
+      // for (let country of countries) {
+      //   countryArr.push(country.name.common);
+      // }
       // for (let city of countryArr) {
       //   console.log(city);
       //   if(button.textContent == await getfetchCities(city)){
@@ -403,9 +485,59 @@ const getCityByCountryButton = async () => {
       //   }
       // }
     }
+    
   });
 };
 getCityByCountryButton();
+
+const testCities = async (str) => {
+  const city = await getCityByCountryButton();
+
+  console.log(city);
+
+  // let chartStatus = Chart.getChart("myChart");
+  // if (chartStatus != undefined) {
+  //   chartStatus.destroy();
+  // }
+
+  // const myChart = new Chart(ctx, {
+  //   type: "bar",
+  //   data: {
+  //     labels: euArray,
+  //     datasets: [
+  //       {
+  //         label: "Population",
+  //         data: euPopArray,
+  //         backgroundColor: [
+  //           "rgba(255, 99, 132, 0.2)",
+  //           "rgba(54, 162, 235, 0.2)",
+  //           "rgba(255, 206, 86, 0.2)",
+  //           "rgba(75, 192, 192, 0.2)",
+  //           "rgba(153, 102, 255, 0.2)",
+  //           "rgba(255, 159, 64, 0.2)",
+  //         ],
+  //         borderColor: [
+  //           "rgba(255, 99, 132, 1)",
+  //           "rgba(54, 162, 235, 1)",
+  //           "rgba(255, 206, 86, 1)",
+  //           "rgba(75, 192, 192, 1)",
+  //           "rgba(153, 102, 255, 1)",
+  //           "rgba(255, 159, 64, 1)",
+  //         ],
+  //         borderWidth: 1,
+  //       },
+  //     ],
+  //   },
+  //   options: {
+  //     scales: {
+  //       y: {
+  //         beginAtZero: true,
+  //       },
+  //     },
+  //   },
+  // });
+};
+// console.log(testCities());
 eventListeners();
 
 //!--------------------Chart.Js-----------------//
@@ -427,7 +559,7 @@ const dummyChartData = async (str) => {
       euPopArray.push(cityArray[i].population);
     }
   }
-  console.log(euArray);
+  // console.log(euArray);
 
   let chartStatus = Chart.getChart("myChart");
   if (chartStatus != undefined) {
@@ -470,8 +602,8 @@ const dummyChartData = async (str) => {
       },
     },
   });
-  console.log(`Eu Arr : ${euArray}`);
-  console.log(`Eu Arr : ${euPopArray}`);
+  // console.log(`Eu Arr : ${euArray}`);
+  // console.log(`Eu Arr : ${euPopArray}`);
 };
 // console.log(array);
 // arrayTestChar();
