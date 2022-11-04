@@ -10,3 +10,7 @@
   max-width: 100em;
    max-height: 100em; 
 }
+
+.hide{
+  display: none;
+}
