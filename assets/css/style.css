@@ -5,17 +5,55 @@
 }
 
 body {
-  background-color: #051923;
+  background-color: #00111c;
 }
 
 .h1 {
   display: flex;
   justify-content: center;
+  font-family: "Montserrat Subrayada", sans-serif;
   color: #00A6FB;
   font-size: 40px;
   margin-top: 0.5em;
 }
 
+.container .loader {
+  display: flex;
+  justify-content: center;
+}
+.container .loader .spinner {
+  align-items: center;
+  width: 40px;
+  height: 26px;
+  --c: linear-gradient(currentColor 0 0);
+  background: var(--c) 0 100%, var(--c) 50% 100%, var(--c) 100% 100%;
+  background-size: 8px calc(100% - 4px);
+  background-repeat: no-repeat;
+  position: relative;
+  color: #778DA9;
+}
+.container .loader .spinner:before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  left: 0;
+  color: #00A6FB;
+  top: 0;
+  animation: db3-1 1.5s linear infinite alternate, db3-2 0.75s cubic-bezier(0, 200, 0.8, 200) infinite;
+}
+@keyframes db3-1 {
+  100% {
+    left: calc(100% - 8px);
+  }
+}
+@keyframes db3-2 {
+  100% {
+    top: -0.1px;
+  }
+}
 .container .button-container {
   display: flex;
   text-align: centers;
@@ -23,13 +61,48 @@ body {
   flex-wrap: wrap;
 }
 .container .button-container button {
-  margin-left: 2em;
-  padding: 0.3em 1em;
-  margin-bottom: 0.2em;
-  background-color: #003554;
-  color: #00A6FB;
   cursor: pointer;
-  border: 1px solid #00A6FB;
+  position: relative;
+  padding: 10px 20px;
+  background: #003554;
+  margin-left: 2em;
+  margin-top: 1em;
+  color: #00A6FB;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: all 1s;
+}
+.container .button-container button:after, .container .button-container button:before {
+  content: " ";
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  transition: all 1s;
+}
+.container .button-container button:after {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid #e394f3;
+  border-left: 2px solid #e394f3;
+}
+.container .button-container button:before {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid #00A6FB;
+  border-right: 2px solid #00A6FB;
+}
+.container .button-container button:hover {
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.container .button-container button:hover:before, .container .button-container button:hover:after {
+  width: 100%;
+  height: 100%;
+}
+.container #myChart {
+  margin: 0 2em;
+  border-top: none;
+  border-bottom: none;
 }
 
 .buttons-containers {
@@ -40,10 +113,40 @@ body {
   margin-bottom: 1em;
 }
 .buttons-containers button {
-  margin-left: 1em;
-  padding: 0.3em 2em;
-  background-color: #003554;
-  color: #00A6FB;
   cursor: pointer;
-  border: 1px solid #00A6FB;
+  position: relative;
+  padding: 10px 20px;
+  background: #003554;
+  margin-left: 2em;
+  color: #00A6FB;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: all 1s;
+}
+.buttons-containers button:after, .buttons-containers button:before {
+  content: " ";
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  transition: all 1s;
+}
+.buttons-containers button:after {
+  top: -1px;
+  left: -1px;
+  border-top: 3px solid #00A6FB;
+  border-left: 3px solid #00A6FB;
+}
+.buttons-containers button:before {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 3px solid #00A6FB;
+  border-right: 3px solid #00A6FB;
+}
+.buttons-containers button:hover {
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.buttons-containers button:hover:before, .buttons-containers button:hover:after {
+  width: 100%;
+  height: 100%;
 }

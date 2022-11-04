@@ -5,6 +5,8 @@ const africa = document.querySelector("#africa");
 const america = document.querySelector("#america");
 const oceania = document.querySelector("#oceania");
 const buttonContainer = document.querySelector('.button-container')
+const loader = document.querySelector('.loader')
+
 let regions = ["africa", "americas", "asia", "europe", "oceania"];
 const continents = {};
 
@@ -76,63 +78,7 @@ const getCitiesFromPostmanApi = async () => {
   let countries = await getCountriesPostmanApi();
   console.log(countries);
 };
-//   getCitiesFromPostmanApi()
-const getAsiaOnPage = async () => {
-  let countries = await getCountries();
 
-  for (let i = 0; i < countries.length; i++) {
-    if (countries[i].region == "Asia") {
-      const p = document.createElement("p");
-      container.appendChild(p);
-      //   p.textContent = countries[i].name.common;
-    }
-  }
-};
-
-const getAmericaOnPage = async () => {
-  let countries = await getCountries();
-
-  for (let i = 0; i < countries.length; i++) {
-    if (countries[i].region == "Americas") {
-      const p = document.createElement("p");
-      container.appendChild(p);
-      //   p.textContent = countries[i].name.common;
-    }
-  }
-};
-const getAfricaOnPage = async () => {
-  let countries = await getCountries();
-  console.log(countries);
-  for (let i = 0; i < countries.length; i++) {
-    if (countries[i].region == "Africa") {
-      const p = document.createElement("p");
-      container.appendChild(p);
-      //   p.textContent = countries[i].name.common;
-    }
-  }
-};
-const getEuropeOnPage = async () => {
-  let countries = await getCountries();
-  console.log(countries);
-  for (let i = 0; i < countries.length; i++) {
-    if (countries[i].region == "Europe") {
-      const p = document.createElement("p");
-      container.appendChild(p);
-      //   p.textContent = countries[i].name.common;
-    }
-  }
-};
-const getOceaniaOnPage = async () => {
-  let countries = await getCountries();
-  console.log(countries);
-  for (let i = 0; i < countries.length; i++) {
-    if (countries[i].region == "Oceania") {
-      const p = document.createElement("p");
-      container.appendChild(p);
-      //   p.textContent = countries[i].name.common;
-    }
-  }
-};
 
 //!todo`````````````````````````````````
 const getfetchCities = async (countryName) => {
@@ -162,39 +108,7 @@ const getfetchCities = async (countryName) => {
 
   const data = await res.json();
 
-//   if(data.error){
-//     for(let country of countries){
-      
-//     console.log(country);
-//     const response = await fetch(
-//       "https://countriesnow.space/api/v0.1/countries/population/cities/filter",
-//       {
-//         method: "POST",
-//         headers: {
-//           Accept: "application/json",
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           limit: 10,
-//           order: "asc",
-//           orderBy: "name",
-//           country: `${country.name.official}`,
-//         }),
-//       },
-//     );
-//   }
-// }
 
-  // return data;
-  // console.log(data);
-  // let cities2 = []
-  // for (let i = 0; i < data.data.length; i++) {
-  //   // console.log(data.data[i]);
-
-  //   let {city,country,populationCounts} = data.data[i]
-  //   cities2.push({city,country,populationCounts})
-
-  // }
   const cities = data.data.map((city) => {
     return {
       country: city.country,
@@ -202,14 +116,14 @@ const getfetchCities = async (countryName) => {
       population: city.populationCounts[0].value,
     };
   });
-  // console.log(cities);
+
   return cities;
 };
 
 console.log(getfetchCities('Italy'));
 
 const printCities = async (str) => {
-  // const data = await getfetchCities()
+
   const countries = await getCountries();
 
   let countryArr = [];
@@ -231,44 +145,7 @@ const printCities = async (str) => {
   });
   console.log(await country);
 };
-// console.log(printCities());
-// const printCitiesTest = async(str) => {
-//   const cities = await printCities('Italy')
-//   for(let city of cities.data){
-//     console.log(city);
-//   }
-// }
-// printCitiesTest()
-// const getCities = async () => {
-//   let countries = await getCountries();
 
-//   // for(let box in countries)
-//   // console.log(countries[0]);
-//   let cities = [];
-//   let cName1;
-//   for (let i = 0; i < countries.length; i++) {
-//     let cName = countries[i].name.common;
-
-//     // const citiess = city.data.map((city)=>{
-//     //     return {name:city.city,population:city,populationCounts};
-
-//     // })
-//     try {
-//     const city = await getfetchCities(cName);
-
-//       for (let x = 0; x < city.data.length; x++) {
-
-//         let cityBlock = city.data[x].city
-//         let  population = city.data[x].populationCounts
-//         cities.push({cityBlock,population})
-//       }
-//     } catch {
-//       (err) => console.log(err);
-//     }
-//   }
-//   console.log(cities);
-// };
-// getCities();
 
 //!todo``````````````````````
 
@@ -277,6 +154,7 @@ const printCities = async (str) => {
 
   const getAfricaButtons = async (str) => {
     buttonContainer.replaceChildren([])
+    
     const countries = await getCountries();
 
     container.appendChild(buttonContainer);
@@ -292,9 +170,11 @@ const printCities = async (str) => {
         }
      
     }
+   
   };
   const getAsiaButtons = async () => {
     buttonContainer.replaceChildren([])
+    
     const countries = await getCountries();
    
    
@@ -304,13 +184,15 @@ const printCities = async (str) => {
         const button = document.createElement("button");
         buttonContainer.appendChild(button);
         button.textContent = country.name.common;
-   
+        
       } 
     }
+   
   };
   const getAmericaButtons = async () => {
     
     buttonContainer.replaceChildren([])
+    
     const countries = await getCountries();
    
    
@@ -322,9 +204,11 @@ const printCities = async (str) => {
         button.textContent = country.name.common;
       }
     }
+   
   };
   const getOceaniaButtons = async () => {
     buttonContainer.replaceChildren([])
+    
     const countries = await getCountries();
   
 
@@ -336,18 +220,18 @@ const printCities = async (str) => {
         button.textContent = country.name.common;
       }
     }
+   
   };
   const getEuropeButtons = async () => {
     buttonContainer.replaceChildren([])
+    
     const countries = await getCountries();
 
   
   
     container.appendChild(buttonContainer);
     for (let country of countries) {
-      // if(){
-      //   buttonConitaner.classList.add('hide')
-      // }
+   
       if (country.region == "Europe") {
         const button = document.createElement("button");
         buttonContainer.appendChild(button);
@@ -356,18 +240,26 @@ const printCities = async (str) => {
         buttonContainer.classList.remove('hide')
         
       }
-      // if(buttonConitaner.contains(country.name.common) == ){
-      //   countryButton = false;
-      //   buttonConitaner.classList.add('hide')
-      //   // button.classList.add('hide')
-      // }
+   
 
 
       console.log(country);
     }
+   
 
   };
 
+  const setSpinner = (bool) => {
+    if (bool) {
+      const spinner = document.createElement("div");
+      spinner.className = 'spinner'
+     
+      loader.prepend(spinner);
+    } else {
+      const spinner = document.querySelector(".spinner");
+      loader.removeChild(spinner);
+    }
+  };
 
 const eventListeners = () => {
 const buttonConitaner = document.querySelector('#button-container')
@@ -375,9 +267,10 @@ const buttonConitaner = document.querySelector('#button-container')
 
   asia.addEventListener("click", (e) => {
     if (e.target.id == "asia") {
-
+      
       getAsiaButtons();
       dummyChartData("Asia");
+     
     }
   });
   africa.addEventListener("click", (e) => {
@@ -428,13 +321,12 @@ const getCityByCountryButton = async () => {
   Conitaner.addEventListener("click", async (e) => {
     if (e.target.tagName === "BUTTON") {
       const button = e.target;
-
+      setSpinner(true)
       for (let i = 0; i < countries.length; i++) {
         console.log(countries[i]);
         countryArr.push(countries[i].name.common);
         regionArr.push(countries[i]);
        
-        // currentCitiesBorders.push(countries[i].borders);
       }
 
 
@@ -464,12 +356,12 @@ const getCityByCountryButton = async () => {
           ),
       );
    
-            // console.log(currentCitiesTag);
+
       let currentCities = [];
       let currentPopulation = [];
       let currentBorders = [];
       for (let city of cityCountry) {
-        // console.log(`country ${city}`);
+
         let { name, country, population } = city;
 
         if (button.textContent == country) {
@@ -491,9 +383,9 @@ const getCityByCountryButton = async () => {
       if (chartStatus2 != undefined) {
         chartStatus2.destroy();
       }
-   
+      setSpinner(false)
       const myChart = new Chart(ctx, {
-        type: "bar",
+        type: "line",
         data: {
           labels: currentCities,
           datasets: [
@@ -517,14 +409,54 @@ const getCityByCountryButton = async () => {
                 "rgba(255, 159, 64, 1)",
               ],
               borderWidth: 1,
+              color:"rgba(255, 159, 64, 1)",
             },
+            
           ],
         },
         options: {
+          animations: {
+            tension: {
+              duration: 1000,
+              easing: 'linear',
+              from: 1,
+              to: 0,
+              loop: true
+            }
+          },
+          plugins: { 
+            legend: {
+              labels: {
+                color: "#E4C1F9",  
+            
+                font: {
+                  size: 14 
+                }
+              }
+            }
+          },
+          
           scales: {
             y: {
               beginAtZero: true,
+              ticks: {
+                color: ["#FF99C8","#FCF6BD","#D0F4DE","#A9DEF9","#E4C1F9"], 
+                // fontSize: 18,
+                font: {
+                  size: 14, 
+                },
+              },
+              
             },
+            x:{
+              ticks: {
+                color: ["#FF99C8","#FCF6BD","#D0F4DE","#A9DEF9","#E4C1F9"], 
+              
+                font: {
+                  size: 14, 
+                },
+              },
+            }
           },
         },
       })
@@ -532,6 +464,7 @@ const getCityByCountryButton = async () => {
 
     }
   });
+  
 };
 getCityByCountryButton();
 
@@ -562,14 +495,9 @@ const dummyChartData = async (str) => {
       const name = cityArray[i].name.common
       borderArray.push({name,border,tag});
     }
-    // if (cityArray[i].region == str) {
-    // }
+   
   }
-  // for(let border of borderArray){
-  //   console.log(border);
-  //   let {name,border,tag}= border
-  //   if(name ==)
-  // }
+ 
 
   let chartStatus = Chart.getChart("myChart");
   if (chartStatus != undefined) {
@@ -577,7 +505,7 @@ const dummyChartData = async (str) => {
   }
 
   const myChart = new Chart(ctx, {
-    type: "bar",
+    type: "line",
     data: {
       labels: euArray,
       datasets: [
@@ -605,13 +533,49 @@ const dummyChartData = async (str) => {
       ],
     },
     options: {
+      animations: {
+        tension: {
+          duration: 1000,
+          easing: 'easeInOutQuad',
+          from: 1,
+          to: 0,
+          loop: true
+        }
+      },
+      plugins: { 
+        legend: {
+          labels: {
+            color: "#FFAFCC",  
+           
+            font: {
+              size: 14 
+            }
+          }
+        }
+      },
       scales: {
         y: {
           beginAtZero: true,
+          ticks: {
+            color: ["#CDB4DB","#FFC8DD","#FFAFCC","#BDE0FE","#A2D2FF"], 
+    
+            font: {
+              size: 14, 
+            },
+          },
+          
         },
+        x:{
+          ticks: {
+            color: ["#CDB4DB","#FFC8DD","#FFAFCC","#BDE0FE","#A2D2FF"],
+    
+            font: {
+              size: 14, 
+            },
+          },
+        }
       },
     },
   });
-  // console.log(`Eu Arr : ${euArray}`);
-  // console.log(`Eu Arr : ${euPopArray}`);
+
 };
