@@ -17,6 +17,15 @@ body {
   margin-top: 0.5em;
 }
 
+.textRotate {
+  display: none;
+  background-color: white;
+  margin-top: 50%;
+}
+.textRotate h1 {
+  color: black;
+}
+
 .container .loader {
   display: flex;
   justify-content: center;

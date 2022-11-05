@@ -1,1 +1,26 @@
-
+@media (orientation: portrait) {
+  .container {
+    display: none;
+  }
+  .buttons-containers {
+    display: none;
+  }
+  .h1 {
+    display: none;
+  }
+  .textRotate {
+    display: block;
+    background-color: rgb(15, 64, 119);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .textRotate h1 {
+    color: black;
+  }
+}
+@media all and (max-width: 1550px) {
+  .container .chart-container {
+    max-width: 90em;
+    height: 20em;
+  }
+}

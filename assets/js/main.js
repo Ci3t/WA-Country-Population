@@ -67,16 +67,16 @@ const getCountriesPostmanApi = async () => {
   let countries = fetchCountryData.data.data;
   let fetchedCountries = [];
   for (let country1 of countries) {
-    // console.log(country);
-    let { country, cities } = country1;
-    fetchedCountries.push({ country, cities });
+    // console.log(country1);
+    let { country, cities,iso3 } = country1;
+    fetchedCountries.push({ country, cities ,iso3});
   }
   return fetchedCountries;
 };
 
 const getCitiesFromPostmanApi = async () => {
   let countries = await getCountriesPostmanApi();
-  console.log(countries);
+  // console.log(countries);
 };
 
 
@@ -120,7 +120,7 @@ const getfetchCities = async (countryName) => {
   return cities;
 };
 
-console.log(getfetchCities('Italy'));
+console.log(getfetchCities('Morocco'));
 
 const printCities = async (str) => {
 
@@ -243,7 +243,7 @@ const printCities = async (str) => {
    
 
 
-      console.log(country);
+      // console.log(country);
     }
    
 
@@ -308,7 +308,7 @@ const buttonConitaner = document.querySelector('#button-container')
 
 const getCityByCountryButton = async () => {
   const Conitaner = document.querySelector(".container");
-
+  const countriesPostMan = await getCountriesPostmanApi()
   const countries = await getCountries();
   const ctx = document.getElementById("myChart").getContext("2d");
 
@@ -316,19 +316,30 @@ const getCityByCountryButton = async () => {
   let countryArr = [];
   let regionArr = [];
   let cityCountry = [];
- 
+ let countryPostManArr = []
+ let cityPostManArr =[]
+ let filteredCityPostArr = []
 
   Conitaner.addEventListener("click", async (e) => {
     if (e.target.tagName === "BUTTON") {
       const button = e.target;
       setSpinner(true)
       for (let i = 0; i < countries.length; i++) {
-        console.log(countries[i]);
+
         countryArr.push(countries[i].name.common);
         regionArr.push(countries[i]);
        
       }
+      for (let i = 0; i < countriesPostMan.length; i++) {
+        let country = countriesPostMan[i].country
+        let city = countriesPostMan[i].cities.slice(0,10)
+        let city2 = [...city]
 
+        countryPostManArr.push({country,city2})
+
+        
+      }
+    
 
       for (let country of countryArr) {
         
@@ -363,7 +374,7 @@ const getCityByCountryButton = async () => {
       for (let city of cityCountry) {
 
         let { name, country, population } = city;
-
+ 
         if (button.textContent == country) {
 
    
@@ -376,7 +387,18 @@ const getCityByCountryButton = async () => {
   
         ;
       }
+      let c1 = []
+      let c2 = []
+      for (let city of countryPostManArr){
+          let {country,city2} = city
 
+          if (button.textContent == country) {
+            c1.push(country)
+            c2.push(city2)
+    
+          }
+      }
+     
      
       let chart22 = Chart.getChart("myChart");
       let chartStatus2 = Chart.getChart("myChart");
@@ -385,7 +407,7 @@ const getCityByCountryButton = async () => {
       }
       setSpinner(false)
       const myChart = new Chart(ctx, {
-        type: "line",
+        type: "bar",
         data: {
           labels: currentCities,
           datasets: [
@@ -410,6 +432,10 @@ const getCityByCountryButton = async () => {
               ],
               borderWidth: 1,
               color:"rgba(255, 159, 64, 1)",
+              // parsing: {
+              //   xAxisKey:'cities[0]',
+              //   yAxisKey:'country',
+              // },
             },
             
           ],
@@ -472,7 +498,18 @@ getCityByCountryButton();
 eventListeners();
 
 //!--------------------Chart.Js-----------------//
+function beforePrintHandler () {
+  for (let id in Chart.instances) {
+      Chart.instances[id].resize();
+  }
+}
+window.addEventListener('beforeprint', () => {
+  myChart.resize(300, 80);
+});
 
+window.addEventListener('afterprint', () => {
+  myChart.resize(100, 500);
+});
 let array = [];
 
 const dummyChartData = async (str) => {
