@@ -21,6 +21,9 @@
 @media all and (max-width: 1550px) {
   .container .chart-container {
     max-width: 90em;
-    height: 20em;
+    max-height: 60vh;
+  }
+  .container .button-container {
+    margin: 0 5em;
   }
 }

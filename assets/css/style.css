@@ -108,7 +108,10 @@ body {
   width: 100%;
   height: 100%;
 }
-.container #myChart {
+.container .chart-container {
+  height: 80vh;
+}
+.container .chart-container #myChart {
   margin: 0 2em;
   border-top: none;
   border-bottom: none;
